@@ -51,14 +51,51 @@
             </div>
         </EditForm>
         <hr class="my-4" />
-
+        <EditForm Model="_registerSelector">
+            <div class="row">
+                <div class="col-lg">
+                    <label class="form-label">Źródło:</label>
+                    <InputSelect @bind-Value="_registerSelector.Source" class="custom-select">
+                        <option value="@Register.AX">AX</option>
+                        <option value="@Register.BX">BX</option>
+                        <option value="@Register.CX">CX</option>
+                        <option value="@Register.DX">DX</option>
+                    </InputSelect>
+                </div>
+                <div class="col-lg">
+                    <label class="form-label">Cel:</label>
+                    <InputSelect @bind-Value="_registerSelector.Destination" class="custom-select">
+                        <option value="@Register.AX">AX</option>
+                        <option value="@Register.BX">BX</option>
+                        <option value="@Register.CX">CX</option>
+                        <option value="@Register.DX">DX</option>
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="btn-group mt-2 d-flex w-100">
+                <button class="btn btn-outline-info" @onclick="_basicRegisterOperator.MOV">
+                    MOV
+                </button>
+                <button class="btn btn-outline-info" @onclick="_basicRegisterOperator.XCHG">
+                    XCHG
+                </button>
+            </div>
+        </EditForm>
     </div>
     <div class="col">
-
+        
     </div>
 </div>
 
 @code
 {
     BasicRegisters _basicRegisters = new BasicRegisters();
+    RegisterSelector _registerSelector = new RegisterSelector();
+
+    BasicRegisterOperator _basicRegisterOperator;
+
+    protected override void OnInitialized()
+    {
+        _basicRegisterOperator = new BasicRegisterOperator(_basicRegisters, _registerSelector);
+    }
 }
