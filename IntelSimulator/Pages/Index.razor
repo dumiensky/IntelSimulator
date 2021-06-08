@@ -3,15 +3,15 @@
 
 <div class="row">
     <div class="col">
-        <EditForm EditContext="_formContext" OnValidSubmit="ChangeValues">
+        <EditForm Model="_basicRegisters.Inputs" OnValidSubmit="() => _basicRegisters.ApplyInputs()">
             <DataAnnotationsValidator />
 
             <div class="form-row">
                 <div class="btn-group mb-2 d-flex w-100">
-                    <button class="btn btn-outline-info" @onclick="() => _formModel.Reset()">
+                    <button class="btn btn-outline-info" @onclick="() => _basicRegisters.Reset()">
                         RESET
                     </button>
-                    <button class="btn btn-outline-info" @onclick="() => _formModel.Randomize()">
+                    <button class="btn btn-outline-info" @onclick="() => _basicRegisters.Randomize()">
                         RANDOM
                     </button>
                 </div>
@@ -19,29 +19,29 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">AX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_formModel.AX_HEX" disabled/>
-                    <InputText @bind-Value="_formModel.Inputs.AX" class="form-control" />
+                    <input type="text" class="form-control" value="@_basicRegisters.AX_HEX" disabled/>
+                    <InputText @bind-Value="_basicRegisters.Inputs.AX" class="form-control" />
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">BX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_formModel.BX_HEX" disabled />
-                    <InputText @bind-Value="_formModel.Inputs.BX" class="form-control" />
+                    <input type="text" class="form-control" value="@_basicRegisters.BX_HEX" disabled />
+                    <InputText @bind-Value="_basicRegisters.Inputs.BX" class="form-control" />
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">CX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_formModel.CX_HEX" disabled />
-                    <InputText @bind-Value="_formModel.Inputs.CX" class="form-control" />
+                    <input type="text" class="form-control" value="@_basicRegisters.CX_HEX" disabled />
+                    <InputText @bind-Value="_basicRegisters.Inputs.CX" class="form-control" />
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">DX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_formModel.DX_HEX" disabled />
-                    <InputText @bind-Value="_formModel.Inputs.DX" class="form-control" />
+                    <input type="text" class="form-control" value="@_basicRegisters.DX_HEX" disabled />
+                    <InputText @bind-Value="_basicRegisters.Inputs.DX" class="form-control" />
                 </div>
                 <div class="input-group">
                     <button class="btn btn-block btn-success" type="submit">
@@ -50,6 +50,8 @@
                 </div>
             </div>
         </EditForm>
+        <hr class="my-4" />
+
     </div>
     <div class="col">
 
@@ -58,31 +60,5 @@
 
 @code
 {
-    EditContext _formContext;
-    SimulatorModel _formModel = new SimulatorModel();
-
-    protected override void OnInitialized()
-    {
-        _formContext = new EditContext(_formModel.Inputs);
-    }
-
-    private void ChangeValues()
-    {
-        _formModel.AX = ParseIfNotEmpty(_formModel.Inputs.AX) ?? _formModel.AX;
-        _formModel.BX = ParseIfNotEmpty(_formModel.Inputs.BX) ?? _formModel.BX;
-        _formModel.CX = ParseIfNotEmpty(_formModel.Inputs.CX) ?? _formModel.CX;
-        _formModel.DX = ParseIfNotEmpty(_formModel.Inputs.DX) ?? _formModel.DX;
-
-        _formModel.Inputs.Clear();
-    }
-
-    private int? ParseIfNotEmpty(string input)
-    {
-        if (!string.IsNullOrWhiteSpace(input))
-        {
-            return int.Parse(input, System.Globalization.NumberStyles.HexNumber);
-        }
-
-        return null;
-    }
+    BasicRegisters _basicRegisters = new BasicRegisters();
 }
