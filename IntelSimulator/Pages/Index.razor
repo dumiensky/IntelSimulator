@@ -57,7 +57,7 @@
                 </div>
             </div>
         </EditForm>
-        <hr class="my-4" />
+        <hr class="my-3" />
         <EditForm Model="_basicRegisterSelector">
             <div class="row">
                 <div class="col-lg">
@@ -88,7 +88,7 @@
                 </button>
             </div>
         </EditForm>
-        <hr class="my-4" />
+        <hr class="my-3" />
         <span>Tutaj operacje na stosie</span>
     </div>
     <div class="col bg-light rounded p-2">
@@ -146,7 +146,7 @@
                 </div>
             </div>
         </EditForm>
-        <hr class="my-4" />
+        <hr class="my-3" />
         <EditForm Model="_advancedRegisterSelector">
             <div class="row">
                 <div class="col-lg">
@@ -200,14 +200,26 @@
                 </div>
             </div>
             <div class="btn-group mt-2 d-flex w-100">
-                <button class="btn btn-outline-info" @onclick="_basicRegisterOperator.MOV">
+                <button class="btn btn-outline-info" @onclick="_advancedRegisterOperator.MOV">
                     MOV
                 </button>
-                <button class="btn btn-outline-info" @onclick="_basicRegisterOperator.XCHG">
+                <button class="btn btn-outline-info" @onclick="_advancedRegisterOperator.XCHG">
                     XCHG
                 </button>
             </div>
         </EditForm>
+        <hr class="my-3" />
+        <span>Zawartość pamięci:</span>
+        <div class="m-2 p-2 border border-warning rounded">
+            @for (int i = 0; i < _memory.Length; i++)
+            {
+                if(_memory[i] != 0)
+                {
+                    <span>[@(Convert.ToString(i, 16).PadLeft(4, '0'))] @Convert.ToString(_memory[i], 16).PadLeft(4, '0')</span>
+                    <br/>
+                }
+            }
+        </div>
     </div>
 </div>
 
@@ -222,9 +234,15 @@
     BasicRegisterOperator _basicRegisterOperator;
     AdvancedRegisterOperator _advancedRegisterOperator;
 
+    int[] _memory;
+
     protected override void OnInitialized()
     {
-        _basicRegisterOperator = new BasicRegisterOperator(_registers, _basicRegisterSelector);
-        _advancedRegisterOperator = new AdvancedRegisterOperator(_registers, _advancedRegisterSelector);
+        _memory = new int[64 * 1024];
+
+        _basicRegisterOperator = new BasicRegisterOperator(
+            _registers, _basicRegisterSelector);
+        _advancedRegisterOperator = new AdvancedRegisterOperator(
+            _registers, _otherRegisters, _advancedRegisterSelector, _memory);
     }
 }
