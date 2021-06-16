@@ -2,7 +2,7 @@
 @using IntelSimulator.Models
 
 <div class="row">
-    <div class="col">
+    <div class="col bg-light rounded p-2">
         <EditForm Model="_registers.Inputs" OnValidSubmit="() => _registers.ApplyInputs()">
             <DataAnnotationsValidator />
 
@@ -43,6 +43,13 @@
                     <input type="text" class="form-control" value="@_registers.DX_HEX" disabled />
                     <InputText @bind-Value="_registers.Inputs.DX" class="form-control" />
                 </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">&nbsp;</div>
+                    </div>
+                    <input type="text" class="form-control" disabled />
+                    <input type="text" class="form-control" disabled />
+                </div>
                 <div class="input-group">
                     <button class="btn btn-block btn-success" type="submit">
                         Wpisz nowe wartości
@@ -81,24 +88,143 @@
                 </button>
             </div>
         </EditForm>
+        <hr class="my-4" />
+        <span>Tutaj operacje na stosie</span>
     </div>
-    <div class="col">
-        
+    <div class="col bg-light rounded p-2">
+        <EditForm Model="_otherRegisters.Inputs" OnValidSubmit="() => _otherRegisters.ApplyInputs()">
+            <DataAnnotationsValidator />
+
+            <div class="form-row">
+                <div class="btn-group mb-2 d-flex w-100">
+                    <button class="btn btn-outline-info" @onclick="() => _otherRegisters.Reset()">
+                        RESET
+                    </button>
+                    <button class="btn btn-outline-info" @onclick="() => _otherRegisters.Randomize()">
+                        RANDOM
+                    </button>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">SI</div>
+                    </div>
+                    <input type="text" class="form-control" value="@_otherRegisters.SI_HEX" disabled/>
+                    <InputText @bind-Value="_otherRegisters.Inputs.SI" class="form-control" />
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">DI</div>
+                    </div>
+                    <input type="text" class="form-control" value="@_otherRegisters.DI_HEX" disabled />
+                    <InputText @bind-Value="_otherRegisters.Inputs.DI" class="form-control" />
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">BP</div>
+                    </div>
+                    <input type="text" class="form-control" value="@_otherRegisters.BP_HEX" disabled />
+                    <InputText @bind-Value="_otherRegisters.Inputs.BP" class="form-control" />
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">SP</div>
+                    </div>
+                    <input type="text" class="form-control" value="@_otherRegisters.SP_HEX" disabled />
+                    <InputText @bind-Value="_otherRegisters.Inputs.SP" class="form-control" />
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">DISP</div>
+                    </div>
+                    <input type="text" class="form-control" value="@_otherRegisters.DISP_HEX" disabled />
+                    <InputText @bind-Value="_otherRegisters.Inputs.DISP" class="form-control" />
+                </div>
+                <div class="input-group">
+                    <button class="btn btn-block btn-success" type="submit">
+                        Wpisz nowe wartości
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+        <hr class="my-4" />
+        <EditForm Model="_advancedRegisterSelector">
+            <div class="row">
+                <div class="col-lg">
+                    <label class="form-label">Kierunek:</label>
+                    <InputSelect @bind-Value="_advancedRegisterSelector.Flow" class="custom-select">
+                        <option value="@FlowType.FromRegisterToMemory">z rejestru do pamięci</option>
+                        <option value="@FlowType.FromMemoryToRegister">z pamięci do rejestru</option>
+                    </InputSelect>
+                </div>
+                <div class="col-lg">
+                    <label class="form-label">Typ adresowania:</label>
+                    <InputSelect @bind-Value="_advancedRegisterSelector.AddressType" class="custom-select">
+                        <option value="@AddressType.Index">Indeksowe</option>
+                        <option value="@AddressType.Base">Bazowe</option>
+                        <option value="@AddressType.IndexBase">Indeksowo-Bazowe</option>
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="p-2 my-2 border rounded border-info">
+                <div class="row">
+                    <div class="col">
+                        <InputSelect @bind-Value="_advancedRegisterSelector.Register" class="custom-select">
+                            <option value="@Register.AX">AX</option>
+                            <option value="@Register.BX">BX</option>
+                            <option value="@Register.CX">CX</option>
+                            <option value="@Register.DX">DX</option>
+                        </InputSelect>
+                    </div>
+                    @if(_advancedRegisterSelector.AddressType.HasFlag(AddressType.Index))
+                    {
+                        <div class="col">
+                            <InputRadioGroup @bind-Value="_advancedRegisterSelector.IndexMode">
+                                <InputRadio Value="@IndexMode.SI" />
+                                <text>&nbsp;</text>SI<br>
+                                <InputRadio Value="@IndexMode.DI" />
+                                <text>&nbsp;</text>DI<br>
+                            </InputRadioGroup>
+                        </div>
+                    }
+                    @if(_advancedRegisterSelector.AddressType.HasFlag(AddressType.Base))
+                    {
+                        <div class="col">
+                            <InputRadioGroup @bind-Value="_advancedRegisterSelector.BaseMode">
+                                <InputRadio Value="@BaseMode.BX" />
+                                <text>&nbsp;</text>BX<br>
+                                <InputRadio Value="@BaseMode.BP" />
+                                <text>&nbsp;</text>BP<br>
+                            </InputRadioGroup>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="btn-group mt-2 d-flex w-100">
+                <button class="btn btn-outline-info" @onclick="_basicRegisterOperator.MOV">
+                    MOV
+                </button>
+                <button class="btn btn-outline-info" @onclick="_basicRegisterOperator.XCHG">
+                    XCHG
+                </button>
+            </div>
+        </EditForm>
     </div>
 </div>
 
 @code
 {
-    FlowType _flow = FlowType.FromRegisterToMemory;
-    AddressType _addressType = AddressType.Index;
+    MainRegisters _registers = new MainRegisters();
+    OtherRegisters _otherRegisters = new OtherRegisters();
 
-    Registers _registers = new Registers();
     BasicRegisterSelector _basicRegisterSelector = new BasicRegisterSelector();
+    AdvancedRegisterSelector _advancedRegisterSelector = new AdvancedRegisterSelector();
 
     BasicRegisterOperator _basicRegisterOperator;
+    AdvancedRegisterOperator _advancedRegisterOperator;
 
     protected override void OnInitialized()
     {
         _basicRegisterOperator = new BasicRegisterOperator(_registers, _basicRegisterSelector);
+        _advancedRegisterOperator = new AdvancedRegisterOperator(_registers, _advancedRegisterSelector);
     }
 }

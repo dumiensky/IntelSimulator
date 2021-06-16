@@ -3,10 +3,10 @@ namespace IntelSimulator.Models
 {
     public class BasicRegisterOperator
     {
-        readonly Registers _registers;
+        readonly MainRegisters _registers;
         readonly BasicRegisterSelector _registerSelector;
 
-        public BasicRegisterOperator(Registers registers, BasicRegisterSelector registerSelector)
+        public BasicRegisterOperator(MainRegisters registers, BasicRegisterSelector registerSelector)
         {
             _registers = registers;
             _registerSelector = registerSelector;
