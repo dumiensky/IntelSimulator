@@ -24,22 +24,22 @@ namespace IntelSimulator.Models
             int address = GetMemoryAddress();
             if(_registerSelector.Flow == FlowType.FromRegisterToMemory)
             {
-                _memory[address] = GetRegisterValue();
+                _memory[address] = _registers.GetRegisterValue(_registerSelector.Register);
             }
             if(_registerSelector.Flow == FlowType.FromMemoryToRegister)
             {
-                SetRegisterValue(_memory[address]);
+                _registers.SetRegisterValue(_registerSelector.Register, _memory[address]);
             }
         }
 
         public void XCHG()
         {
             var address = GetMemoryAddress();
-            var registerValue = GetRegisterValue();
+            var registerValue = _registers.GetRegisterValue(_registerSelector.Register);
             var memoryValue = _memory[address];
 
             _memory[address] = registerValue;
-            SetRegisterValue(memoryValue);
+            _registers.SetRegisterValue(_registerSelector.Register, _memory[address]);
         }
 
         private int GetMemoryAddress()
@@ -67,36 +67,6 @@ namespace IntelSimulator.Models
                 AddressType.IndexBase => baseVal + indexVal + dispVal,
                 _ => 0
             };
-        }
-
-        private int GetRegisterValue()
-        {
-            return _registerSelector.Register switch
-            {
-                Register.AX => _registers.AX,
-                Register.BX => _registers.BX,
-                Register.CX => _registers.CX,
-                _ => _registers.DX
-            };
-        }
-
-        private void SetRegisterValue(int value)
-        {
-            switch(_registerSelector.Register)
-            {
-                case Register.AX:
-                    _registers.AX = value;
-                    break;
-                case Register.BX:
-                    _registers.BX = value;
-                    break;
-                case Register.CX:
-                    _registers.CX = value;
-                    break;
-                case Register.DX:
-                    _registers.DX = value;
-                    break;
-            }
         }
     }
 }

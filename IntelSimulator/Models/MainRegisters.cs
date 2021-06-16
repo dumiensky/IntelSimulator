@@ -51,6 +51,36 @@ namespace IntelSimulator.Models
             return null;
         }
 
+        public int GetRegisterValue(Register register)
+        {
+            return register switch
+            {
+                Register.AX => AX,
+                Register.BX => BX,
+                Register.CX => CX,
+                _ => DX
+            };
+        }
+
+        public void SetRegisterValue(Register register, int value)
+        {
+            switch(register)
+            {
+                case Register.AX:
+                    AX = value;
+                    break;
+                case Register.BX:
+                    BX = value;
+                    break;
+                case Register.CX:
+                    CX = value;
+                    break;
+                case Register.DX:
+                    DX = value;
+                    break;
+            }
+        }
+
         public class FormInputs
         {
             [RegularExpression("[0-9a-fA-F]{4}")]

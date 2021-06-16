@@ -58,6 +58,11 @@
             </div>
         </EditForm>
         <hr class="my-3" />
+        <div class="text-center">
+            <h6 class="text-muted">
+                KOMUNIKACJA MIĘDZYREJESTROWA
+            </h6>
+        </div>
         <EditForm Model="_basicRegisterSelector">
             <div class="row">
                 <div class="col-lg">
@@ -89,7 +94,33 @@
             </div>
         </EditForm>
         <hr class="my-3" />
-        <span>Tutaj operacje na stosie</span>
+        <div class="text-center">
+            <h6 class="text-muted">
+                STOS
+            </h6>
+        </div>
+        <div class="row">
+            <div class="col">
+                <EditForm Model="_stackModel">
+                    <InputSelect @bind-Value="_stackModel.Register" class="custom-select">
+                        <option value="@Register.AX">AX</option>
+                        <option value="@Register.BX">BX</option>
+                        <option value="@Register.CX">CX</option>
+                        <option value="@Register.DX">DX</option>
+                    </InputSelect>
+                </EditForm>
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-primary btn-block" @onclick="_stackModel.Push">
+                    PUSH
+                </button>
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-primary btn-block" @onclick="_stackModel.Pop">
+                    POP
+                </button>
+            </div>
+        </div>
     </div>
     <div class="col bg-light rounded p-2">
         <EditForm Model="_otherRegisters.Inputs" OnValidSubmit="() => _otherRegisters.ApplyInputs()">
@@ -147,6 +178,11 @@
             </div>
         </EditForm>
         <hr class="my-3" />
+        <div class="text-center">
+            <h6 class="text-muted">
+                KOMUNIKACJA PAMIĘĆ-REJESTRY
+            </h6>
+        </div>
         <EditForm Model="_advancedRegisterSelector">
             <div class="row">
                 <div class="col-lg">
@@ -165,7 +201,7 @@
                     </InputSelect>
                 </div>
             </div>
-            <div class="p-2 my-2 border rounded border-info">
+            <div class="p-2 my-3 border rounded border-info">
                 <div class="row">
                     <div class="col">
                         <InputSelect @bind-Value="_advancedRegisterSelector.Register" class="custom-select">
@@ -208,7 +244,24 @@
                 </button>
             </div>
         </EditForm>
-        <hr class="my-3" />
+    </div>
+</div>
+<hr class="my-3" />
+<div class="row">
+    <div class="col">
+        <span>Zawartość stosu:</span>
+        <div class="m-2 p-2 border border-warning rounded">
+            @for (int i = 0; i < _stack.Length; i++)
+            {
+                if(_stack[i] != 0)
+                {
+                    <span>[@(Convert.ToString(i, 16).PadLeft(4, '0'))] @Convert.ToString(_stack[i], 16).PadLeft(4, '0')</span>
+                    <br/>
+                }
+            }
+        </div>
+    </div>
+    <div class="col">
         <span>Zawartość pamięci:</span>
         <div class="m-2 p-2 border border-warning rounded">
             @for (int i = 0; i < _memory.Length; i++)
@@ -234,15 +287,20 @@
     BasicRegisterOperator _basicRegisterOperator;
     AdvancedRegisterOperator _advancedRegisterOperator;
 
+    StackModel _stackModel;
     int[] _memory;
+    int[] _stack;
 
     protected override void OnInitialized()
     {
         _memory = new int[64 * 1024];
+        _stack = new int[64 * 1024];
 
         _basicRegisterOperator = new BasicRegisterOperator(
             _registers, _basicRegisterSelector);
         _advancedRegisterOperator = new AdvancedRegisterOperator(
             _registers, _otherRegisters, _advancedRegisterSelector, _memory);
+        _stackModel = new StackModel(
+            _registers, _otherRegisters, _stack);
     }
 }
