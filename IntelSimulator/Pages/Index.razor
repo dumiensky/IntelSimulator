@@ -3,15 +3,15 @@
 
 <div class="row">
     <div class="col">
-        <EditForm Model="_basicRegisters.Inputs" OnValidSubmit="() => _basicRegisters.ApplyInputs()">
+        <EditForm Model="_registers.Inputs" OnValidSubmit="() => _registers.ApplyInputs()">
             <DataAnnotationsValidator />
 
             <div class="form-row">
                 <div class="btn-group mb-2 d-flex w-100">
-                    <button class="btn btn-outline-info" @onclick="() => _basicRegisters.Reset()">
+                    <button class="btn btn-outline-info" @onclick="() => _registers.Reset()">
                         RESET
                     </button>
-                    <button class="btn btn-outline-info" @onclick="() => _basicRegisters.Randomize()">
+                    <button class="btn btn-outline-info" @onclick="() => _registers.Randomize()">
                         RANDOM
                     </button>
                 </div>
@@ -19,29 +19,29 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">AX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_basicRegisters.AX_HEX" disabled/>
-                    <InputText @bind-Value="_basicRegisters.Inputs.AX" class="form-control" />
+                    <input type="text" class="form-control" value="@_registers.AX_HEX" disabled/>
+                    <InputText @bind-Value="_registers.Inputs.AX" class="form-control" />
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">BX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_basicRegisters.BX_HEX" disabled />
-                    <InputText @bind-Value="_basicRegisters.Inputs.BX" class="form-control" />
+                    <input type="text" class="form-control" value="@_registers.BX_HEX" disabled />
+                    <InputText @bind-Value="_registers.Inputs.BX" class="form-control" />
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">CX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_basicRegisters.CX_HEX" disabled />
-                    <InputText @bind-Value="_basicRegisters.Inputs.CX" class="form-control" />
+                    <input type="text" class="form-control" value="@_registers.CX_HEX" disabled />
+                    <InputText @bind-Value="_registers.Inputs.CX" class="form-control" />
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <div class="input-group-text">DX</div>
                     </div>
-                    <input type="text" class="form-control" value="@_basicRegisters.DX_HEX" disabled />
-                    <InputText @bind-Value="_basicRegisters.Inputs.DX" class="form-control" />
+                    <input type="text" class="form-control" value="@_registers.DX_HEX" disabled />
+                    <InputText @bind-Value="_registers.Inputs.DX" class="form-control" />
                 </div>
                 <div class="input-group">
                     <button class="btn btn-block btn-success" type="submit">
@@ -51,11 +51,11 @@
             </div>
         </EditForm>
         <hr class="my-4" />
-        <EditForm Model="_registerSelector">
+        <EditForm Model="_basicRegisterSelector">
             <div class="row">
                 <div class="col-lg">
                     <label class="form-label">Źródło:</label>
-                    <InputSelect @bind-Value="_registerSelector.Source" class="custom-select">
+                    <InputSelect @bind-Value="_basicRegisterSelector.Source" class="custom-select">
                         <option value="@Register.AX">AX</option>
                         <option value="@Register.BX">BX</option>
                         <option value="@Register.CX">CX</option>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-lg">
                     <label class="form-label">Cel:</label>
-                    <InputSelect @bind-Value="_registerSelector.Destination" class="custom-select">
+                    <InputSelect @bind-Value="_basicRegisterSelector.Destination" class="custom-select">
                         <option value="@Register.AX">AX</option>
                         <option value="@Register.BX">BX</option>
                         <option value="@Register.CX">CX</option>
@@ -89,13 +89,16 @@
 
 @code
 {
-    BasicRegisters _basicRegisters = new BasicRegisters();
-    RegisterSelector _registerSelector = new RegisterSelector();
+    FlowType _flow = FlowType.FromRegisterToMemory;
+    AddressType _addressType = AddressType.Index;
+
+    Registers _registers = new Registers();
+    BasicRegisterSelector _basicRegisterSelector = new BasicRegisterSelector();
 
     BasicRegisterOperator _basicRegisterOperator;
 
     protected override void OnInitialized()
     {
-        _basicRegisterOperator = new BasicRegisterOperator(_basicRegisters, _registerSelector);
+        _basicRegisterOperator = new BasicRegisterOperator(_registers, _basicRegisterSelector);
     }
 }

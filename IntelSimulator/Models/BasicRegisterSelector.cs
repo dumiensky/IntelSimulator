@@ -1,7 +1,7 @@
 ﻿using System;
 namespace IntelSimulator.Models
 {
-    public class RegisterSelector
+    public class BasicRegisterSelector
     {
         private Register source = Register.AX;
         private Register destination = Register.BX;
@@ -46,13 +46,5 @@ namespace IntelSimulator.Models
                 }
             }
         }
-    }
-
-    public enum Register
-    {
-        AX,
-        BX,
-        CX,
-        DX
     }
 }

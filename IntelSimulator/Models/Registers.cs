@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IntelSimulator.Models
 {
-    public class BasicRegisters
+    public class Registers
     {
         public int AX { get; set; }
         public int BX { get; set; }

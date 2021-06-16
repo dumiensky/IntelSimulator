@@ -3,12 +3,12 @@ namespace IntelSimulator.Models
 {
     public class BasicRegisterOperator
     {
-        readonly BasicRegisters _basicRegisters;
-        readonly RegisterSelector _registerSelector;
+        readonly Registers _registers;
+        readonly BasicRegisterSelector _registerSelector;
 
-        public BasicRegisterOperator(BasicRegisters basicRegisters, RegisterSelector registerSelector)
+        public BasicRegisterOperator(Registers registers, BasicRegisterSelector registerSelector)
         {
-            _basicRegisters = basicRegisters;
+            _registers = registers;
             _registerSelector = registerSelector;
         }
 
@@ -31,16 +31,16 @@ namespace IntelSimulator.Models
             switch (which)
             {
                 case Register.AX:
-                    _basicRegisters.AX = value;
+                    _registers.AX = value;
                     break;
                 case Register.BX:
-                    _basicRegisters.BX = value;
+                    _registers.BX = value;
                     break;
                 case Register.CX:
-                    _basicRegisters.CX = value;
+                    _registers.CX = value;
                     break;
                 case Register.DX:
-                    _basicRegisters.DX = value;
+                    _registers.DX = value;
                     break;
             }
         }
@@ -50,13 +50,13 @@ namespace IntelSimulator.Models
             switch (which)
             {
                 case Register.AX:
-                    return _basicRegisters.AX;
+                    return _registers.AX;
                 case Register.BX:
-                    return _basicRegisters.BX;
+                    return _registers.BX;
                 case Register.CX:
-                    return _basicRegisters.CX;
+                    return _registers.CX;
                 case Register.DX:
-                    return _basicRegisters.DX;
+                    return _registers.DX;
                 default:
                     return 0;
             }
